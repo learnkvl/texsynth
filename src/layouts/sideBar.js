@@ -60,7 +60,7 @@ const Logo = () => (
       component="div"
       sx={{
         fontWeight: 700,
-        color: 'primary.contrastText',
+        color: 'primary.main',
         display: 'flex',
         alignItems: 'center',
       }}
@@ -150,7 +150,7 @@ const SideBar = () => {
                 color="inherit"
                 aria-label="close menu"
               >
-                <CloseIcon />
+                <CloseIcon color='primary' />
               </IconButton>
             </>
           ) : (
@@ -163,7 +163,7 @@ const SideBar = () => {
         <List component="nav" sx={{ pt: 2 }}>
           {navigationItems.map((item) => {
             const pathBase = '/' + location.pathname.split('/')[1];
-            const isSelected = pathBase === item.path;
+            const isSelected = pathBase === item.path ;
             
             return (
               <ListItem key={item.text} disablePadding>

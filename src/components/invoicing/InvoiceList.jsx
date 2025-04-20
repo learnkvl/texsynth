@@ -41,7 +41,8 @@ import {
   Popover,
   Grid,
   useTheme,
-  alpha
+  alpha,
+  Avatar
 } from '@mui/material';
 import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { visuallyHidden } from '@mui/utils';
@@ -327,7 +328,8 @@ function InvoiceList() {
     dateFrom: '',
     dateTo: '',
     amountMin: '',
-    amountMax: ''
+    amountMax: '',
+    amountBetween: ''
   });
   const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
@@ -432,14 +434,13 @@ function InvoiceList() {
       status: '',
       dateFrom: '',
       dateTo: '',
-      amountMin: '',
-      amountMax: ''
+      amountBetween: ''
     });
     setSearchTerm('');
   };
   
   // Handle sort request
-  const handleRequestSort = (property) => {
+  const handleRequestSort = (property) => () => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -475,17 +476,21 @@ function InvoiceList() {
     const matchesDateFrom = !filters.dateFrom || new Date(invoice.issueDate) >= new Date(filters.dateFrom);
     const matchesDateTo = !filters.dateTo || new Date(invoice.issueDate) <= new Date(filters.dateTo);
     
-    // Amount range filter
-    const matchesAmountMin = !filters.amountMin || invoice.amount >= parseFloat(filters.amountMin);
-    const matchesAmountMax = !filters.amountMax || invoice.amount <= parseFloat(filters.amountMax);
+    // Amount between filter
+    let matchesAmount = true;
+    if (filters.amountBetween) {
+      const [min, max] = filters.amountBetween.split('-').map(Number);
+      if (!isNaN(min) && !isNaN(max)) {
+        matchesAmount = invoice.amount >= min && invoice.amount <= max;
+      }
+    }
     
     return matchesSearch && 
            matchesClient && 
            matchesStatus && 
            matchesDateFrom && 
            matchesDateTo && 
-           matchesAmountMin && 
-           matchesAmountMax;
+           matchesAmount;
   }).sort((a, b) => {
     const aValue = a[orderBy];
     const bValue = b[orderBy];
@@ -626,7 +631,7 @@ function InvoiceList() {
               Advanced Filters
             </Typography>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={3} minWidth={180}>
                 <FormControl fullWidth size="small">
                   <InputLabel id="client-filter-label">Client</InputLabel>
                   <Select
@@ -645,7 +650,7 @@ function InvoiceList() {
                 </FormControl>
               </Grid>
               
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={3} minWidth={180}>
                 <FormControl fullWidth size="small">
                   <InputLabel id="status-filter-label">Status</InputLabel>
                   <Select
@@ -690,35 +695,25 @@ function InvoiceList() {
                   InputLabelProps={{ shrink: true }}
                 />
               </Grid>
-              
-              <Grid item xs={12} sm={6} md={3}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  type="number"
-                  label="Min Amount"
-                  name="amountMin"
-                  value={filters.amountMin}
-                  onChange={handleFilterChange}
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                  }}
-                />
-              </Grid>
-              
-              <Grid item xs={12} sm={6} md={3}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  type="number"
-                  label="Max Amount"
-                  name="amountMax"
-                  value={filters.amountMax}
-                  onChange={handleFilterChange}
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                  }}
-                />
+
+              <Grid item xs={12} sm={6} md={3} minWidth={180}>
+                <FormControl fullWidth size="small">
+                  <InputLabel>Amount Range</InputLabel>
+                  <Select
+                    value={filters.amountBetween}
+                    onChange={handleFilterChange}
+                    name="amountBetween"
+                    label="Amount Range"
+                  >
+                    <MenuItem value="">Any Amount</MenuItem>
+                    <MenuItem value="0-500">$0 - $500</MenuItem>
+                    <MenuItem value="500-1000">$500 - $1,000</MenuItem>
+                    <MenuItem value="1000-5000">$1,000 - $5,000</MenuItem>
+                    <MenuItem value="5000-10000">$5,000 - $10,000</MenuItem>
+                    <MenuItem value="10000-50000">$10,000 - $50,000</MenuItem>
+                    <MenuItem value="50000+">$50,000+</MenuItem>
+                  </Select>
+                </FormControl>
               </Grid>
               
               <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -778,7 +773,29 @@ function InvoiceList() {
                   >
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <ReceiptIcon fontSize="small" sx={{ mr: 1, color: 'text.secondary' }} />
+                        {/* <ReceiptIcon fontSize="small" sx={{ mr: 1, color: 'text.secondary' }} /> */}
+                        <Badge 
+                            color={invoice.status === 'overdue' ? "error" : "default"}
+                            variant={invoice.status === 'overdue' ? "dot" : "standard"}
+                            invisible={!invoice.status === 'overdue'}
+                          >
+                            <Avatar
+                              sx={{ 
+                                width: 28, 
+                                height: 28, 
+                                mr: 1,
+                                bgcolor: invoice.status === 'draft' ? 'warning.light' : 
+                                         invoice.status === 'sent' ? 'primary.light' : 
+                                         invoice.status === 'overdue' ? 'error.light' : 
+                                         'success.light'
+                              }}
+                            >
+                              {invoice.status === 'draft' ? <EditIcon fontSize="small" /> : 
+                               invoice.status === 'sent' ? <SendIcon fontSize="small" /> : 
+                               invoice.status === 'overdue' ? <WarningIcon fontSize="small" /> : 
+                               <CheckCircleIcon fontSize="small" />}
+                            </Avatar>
+                          </Badge>
                         <Typography variant="body2">
                           {invoice.id}
                         </Typography>

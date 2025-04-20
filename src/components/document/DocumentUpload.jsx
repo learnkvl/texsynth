@@ -6,16 +6,8 @@ import {
   Button, 
   Card, 
   CardContent, 
-  CardHeader,
-  Grid, 
   Paper, 
-  Divider,
-  CircularProgress,
   IconButton,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
   Stack,
   Stepper,
   Step,
@@ -23,34 +15,12 @@ import {
   Alert,
   Breadcrumbs,
   Link,
-  TextField,
-  Tooltip,
-  Chip,
-  LinearProgress,
-  Switch,
-  FormControlLabel,
-  Checkbox,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListItemButton,
-  TableContainer,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  Avatar,
-  Badge,
   useTheme,
-  alpha,
-  Autocomplete
-} from '@mui/material';
+  Divider} from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { useNavigate, Link as RouterLink, useLocation } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
@@ -63,35 +33,18 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ReportProblemIcon from '@mui/icons-material/ReportProblem';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import HomeIcon from '@mui/icons-material/Home';
-import ListIcon from '@mui/icons-material/List';
-import ReceiptIcon from '@mui/icons-material/Receipt';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import FolderIcon from '@mui/icons-material/Folder';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
 import DescriptionIcon from '@mui/icons-material/Description';
-import BarChartIcon from '@mui/icons-material/BarChart';
 import CloseIcon from '@mui/icons-material/Close';
-import InfoIcon from '@mui/icons-material/Info';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import EditIcon from '@mui/icons-material/Edit';
 import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
-import SendIcon from '@mui/icons-material/Send';
-import SyncIcon from '@mui/icons-material/Sync';
 import SaveIcon from '@mui/icons-material/Save';
-import ZoomInIcon from '@mui/icons-material/ZoomIn';
-import ZoomOutIcon from '@mui/icons-material/ZoomOut';
-import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import ImageIcon from '@mui/icons-material/Image';
-import TextFieldsIcon from '@mui/icons-material/TextFields';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
-import GavelIcon from '@mui/icons-material/Gavel';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import ZoomOutIcon from '@mui/icons-material/ZoomOut';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 // Create styled components for file upload
 const UploadBox = styled(Box)(({ theme }) => ({
@@ -204,6 +157,7 @@ function DocumentUpload() {
   // State
   const [activeStep, setActiveStep] = useState(0);
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [uploadedFile, setUploadedFile] = useState(null);
   const [processingStatus, setProcessingStatus] = useState("idle"); // idle, processing, success, error
   const [processingProgress, setProcessingProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState('');
@@ -215,18 +169,96 @@ function DocumentUpload() {
   const [pageNumber, setPageNumber] = useState(1);
   const [zoom, setZoom] = useState(100);
 
-  const PreviewDialog = ({ open, onClose, file }) => (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>Preview</DialogTitle>
+
+
+  const togglePreviewDialog = () => {
+    setPreviewDialogOpen(!previewDialogOpen);
+  };
+
+  const PreviewDialog = () => (
+    <Dialog
+      open={previewDialogOpen}
+      onClose={togglePreviewDialog}
+      maxWidth="lg"
+      fullWidth
+    >
+      <DialogTitle>
+        Document Preview
+        <IconButton
+          aria-label="close"
+          onClick={togglePreviewDialog}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
       <DialogContent dividers>
-        {file?.type.startsWith('image/') ? (
-          <img src={file.preview} alt={file.name} style={{ width: '100%' }} />
+        {uploadedFile ? (
+          <Box sx={{ minHeight: 600, display: 'flex', flexDirection: 'column' }}>
+            <Box 
+              sx={{ 
+                flexGrow: 1, 
+                border: '1px solid', 
+                borderColor: 'divider',
+                backgroundColor: '#f5f5f5',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                p: 2,
+                position: 'relative'
+              }}
+            >
+              <img 
+                src={uploadedFile.preview} 
+                alt="Document preview" 
+                style={{ 
+                  maxWidth: '100%', 
+                  maxHeight: '100%', 
+                  objectFit: 'contain',
+                  transform: `scale(${zoom / 100})`
+                }}
+              />
+              
+              <ViewerToolbar>
+                <IconButton onClick={handleZoomOut} size="small">
+                  <ZoomOutIcon />
+                </IconButton>
+                <Typography variant="body2" sx={{ mx: 1 }}>
+                  {zoom}%
+                </Typography>
+                <IconButton onClick={handleZoomIn} size="small">
+                  <ZoomInIcon />
+                </IconButton>
+                <Divider orientation="vertical" flexItem sx={{ mx: 1 }} />
+                <IconButton onClick={handlePrevPage} size="small" disabled={pageNumber === 1}>
+                  <ChevronLeftIcon />
+                </IconButton>
+                <Typography variant="body2" sx={{ mx: 1 }}>
+                  Page {pageNumber}
+                </Typography>
+                <IconButton onClick={handleNextPage} size="small" disabled={pageNumber === 2}>
+                  <ChevronRightIcon />
+                </IconButton>
+              </ViewerToolbar>
+            </Box>
+          </Box>
         ) : (
-          <Typography variant="body2">Preview not available</Typography>
+          <Box sx={{ p: 8, textAlign: 'center' }}>
+            <Typography variant="h6" color="text.secondary" gutterBottom>
+              No document uploaded
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Upload a document to preview it here
+            </Typography>
+          </Box>
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">Close</Button>
+        <Button onClick={togglePreviewDialog}>Close</Button>
       </DialogActions>
     </Dialog>
   );
@@ -234,7 +266,154 @@ function DocumentUpload() {
   const getStepContent = (step) => {
     switch (step) {
       case 0:
-        return <Typography>Step 1: Upload your documents</Typography>;
+        return (
+        <Box>
+          <Typography>Step 1: Upload your documents</Typography>
+            <Card variant="outlined" sx={{ mb: 3 }}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  Upload your Document
+                </Typography>
+                <Typography variant="body2" color="text.secondary" paragraph>
+                  Upload a document to automatically extract invoice information using OCR technology.
+                  Supported formats: PDF, TIFF, JPG, PNG, DOC/DOCX
+                </Typography>
+                
+                <UploadBox
+                  onClick={handleDropZoneClick}
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
+                >
+                  <InvisibleInput
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileSelect}
+                    accept=".pdf,.tiff,.jpg,.jpeg,.png,.doc,.docx"
+                  />
+                  
+                  {!uploadedFile ? (
+                    <>
+                      <CloudUploadIcon 
+                        sx={{ 
+                          fontSize: 60, 
+                          color: 'text.secondary',
+                          mb: 2 
+                        }} 
+                      />
+                      <Typography variant="h6" gutterBottom>
+                        Drag & Drop or Click to Upload
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Upload account statements, collection notices, or related documents
+                      </Typography>
+                    </>
+                  ) : (
+                    <Box sx={{ textAlign: 'center' }}>
+                      <InsertDriveFileIcon 
+                        sx={{ 
+                          fontSize: 60, 
+                          color: 'primary.main',
+                          mb: 2 
+                        }} 
+                      />
+                      <Typography variant="h6" gutterBottom>
+                        {uploadedFile.name}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" gutterBottom>
+                        {(uploadedFile.size / 1024).toFixed(2)} KB • {uploadedFile.type || "Unknown type"}
+                      </Typography>
+                      
+                      <Stack direction="row" spacing={1} justifyContent="center" sx={{ mt: 2 }}>
+                        <Button 
+                          variant="outlined" 
+                          size="small"
+                          startIcon={<DeleteIcon />}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemoveFile();
+                          }}
+                        >
+                          Remove
+                        </Button>
+                        <Button 
+                          variant="outlined" 
+                          size="small"
+                          startIcon={<VisibilityIcon />}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            togglePreviewDialog();
+                          }}
+                        >
+                          Preview
+                        </Button>
+                      </Stack>
+                    </Box>
+                  )}
+                </UploadBox>
+              </CardContent>
+            </Card>
+            
+            {/* <Card variant="outlined">
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  Select Invoice Template
+                </Typography>
+                <Typography variant="body2" color="text.secondary" paragraph>
+                  Choose a template or let our AI automatically detect the best format
+                </Typography>
+                
+                <FormControl fullWidth sx={{ mb: 3 }}>
+                  <InputLabel id="template-select-label">Invoice Template</InputLabel>
+                  <Select
+                    labelId="template-select-label"
+                    value={selectedTemplate}
+                    onChange={handleTemplateChange}
+                    label="Invoice Template"
+                  >
+                    <MenuItem value="">
+                      <em>Auto-detect (Recommended)</em>
+                    </MenuItem>
+                    {invoiceTemplates.map((template) => (
+                      <MenuItem key={template.id} value={template.id}>
+                        {template.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                
+                <Alert 
+                  severity="info" 
+                  sx={{ mb: 2 }}
+                  icon={<AutoAwesomeIcon />}
+                >
+                  <Typography variant="body2">
+                    Our AI will analyze your document and suggest the best template if auto-detect is selected.
+                  </Typography>
+                </Alert>
+                
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Button 
+                    variant="text" 
+                    startIcon={<DocumentScannerIcon />}
+                    onClick={togglePreviewDialog}
+                    disabled={!uploadedFile}
+                  >
+                    Preview Document
+                  </Button>
+                  
+                  <Button
+                    variant="contained"
+                    disabled={!uploadedFile}
+                    onClick={handleNext}
+                    endIcon={<ArrowForwardIcon />}
+                  >
+                    Continue
+                  </Button>
+                </Box>
+              </CardContent>
+            </Card> */}
+          </Box>
+        )
       case 1:
         return <Typography>Step 2: Process your documents</Typography>;
       case 2:
@@ -492,7 +671,7 @@ function DocumentUpload() {
           variant="outlined"
           startIcon={<FolderOpenIcon />}
           component={RouterLink}
-          to="/document"
+          to="/documents"
           sx={{ mr: 1 }}
         >
           All Documents
@@ -596,6 +775,8 @@ function DocumentUpload() {
 
     {/* Preview Dialog */}
     <PreviewDialog />
+
+    
   </Box>
 );
 }

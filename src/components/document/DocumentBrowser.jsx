@@ -716,7 +716,7 @@ function DocumentBrowser() {
               Advanced Filters
             </Typography>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={3} minWidth={180}>
                 <FormControl fullWidth size="small">
                   <InputLabel>Document Type</InputLabel>
                   <Select
@@ -737,7 +737,7 @@ function DocumentBrowser() {
                 </FormControl>
               </Grid>
               
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={3} minWidth={180}>
                 <FormControl fullWidth size="small">
                   <InputLabel>Category</InputLabel>
                   <Select
@@ -761,7 +761,7 @@ function DocumentBrowser() {
                 </FormControl>
               </Grid>
               
-              <Grid item xs={12} sm={6} md={2}>
+              <Grid item xs={12} sm={6} md={2} minWidth={180}>
                 <FormControl fullWidth size="small">
                   <InputLabel>Status</InputLabel>
                   <Select
@@ -781,7 +781,7 @@ function DocumentBrowser() {
                 </FormControl>
               </Grid>
               
-              <Grid item xs={12} sm={6} md={2}>
+              <Grid item xs={12} sm={6} md={2} minWidth={180}>
                 <TextField
                   fullWidth
                   size="small"
@@ -794,7 +794,7 @@ function DocumentBrowser() {
                 />
               </Grid>
               
-              <Grid item xs={12} sm={6} md={2}>
+              <Grid item xs={12} sm={6} md={2} minWidth={180}>
                 <TextField
                   fullWidth
                   size="small"

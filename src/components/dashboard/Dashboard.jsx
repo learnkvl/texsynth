@@ -487,8 +487,8 @@ function Dashboard() {
       
       {/* High Level Stats Cards */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
+        <Grid item xs={12} sm={6} md={3} >
+          <Card sx={{ minWidth: '275px' }}>
             <CardContent>
               <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                 Total Active Cases
@@ -515,7 +515,7 @@ function Dashboard() {
         </Grid>
         
         <Grid item xs={12} sm={6} md={3}>
-          <Card>
+          <Card sx={{ minWidth: '275px' }}>
             <CardContent>
               <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                 Total Debt Amount
@@ -542,7 +542,7 @@ function Dashboard() {
         </Grid>
         
         <Grid item xs={12} sm={6} md={3}>
-          <Card>
+          <Card sx={{ minWidth: '275px' }}>
             <CardContent>
               <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                 Documents Processed
@@ -569,7 +569,7 @@ function Dashboard() {
         </Grid>
         
         <Grid item xs={12} sm={6} md={3}>
-          <Card>
+          <Card sx={{ minWidth: '275px' }}>
             <CardContent>
               <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                 Monthly Collection
@@ -644,8 +644,8 @@ function Dashboard() {
       {/* Main Dashboard Content */}
       <Grid container spacing={3}>
         {/* Tasks & Reminders */}
-        <Grid item xs={12} md={6} lg={4}>
-          <Card sx={{ height: '100%' }}>
+        <Grid size={{ xs: 12, md: 6 ,lg:4}} >  
+          <Card >
             <CardHeader 
               title="Tasks & Reminders" 
               titleTypographyProps={{ variant: 'h6' }}
@@ -659,7 +659,7 @@ function Dashboard() {
               }
             />
             <Divider />
-            <CardContent sx={{ px: 0, py: 0 }}>
+            <CardContent  >
               <Tabs
                 value={taskTabValue}
                 onChange={handleTaskTabChange}
@@ -670,7 +670,7 @@ function Dashboard() {
                 <Tab label="All Tasks" />
               </Tabs>
               
-              <List sx={{ maxHeight: 320, overflow: 'auto' }}>
+              <List sx={{overflowY:"auto",maxHeight:"253px",scrollbarWidth:"none"}} >
                 {tasks.map((task) => (
                   <ListItemButton 
                     key={task.id}
@@ -680,7 +680,7 @@ function Dashboard() {
                       borderColor: 
                         task.priority === 'high' ? 'error.main' :
                         task.priority === 'medium' ? 'warning.main' : 'primary.main',
-                      my: 0.5,
+                      my: 1,
                       mx: 1,
                       borderRadius: 1
                     }}
@@ -713,7 +713,7 @@ function Dashboard() {
         </Grid>
         
         {/* Recent Cases */}
-        <Grid item xs={12} md={6} lg={8}>
+        <Grid size={{ xs: 12, md: 6 ,lg:8}} >
           <Card>
             <CardHeader 
               title="Recent Cases" 
@@ -730,7 +730,7 @@ function Dashboard() {
             />
             <Divider />
             <CardContent sx={{ p: 0 }}>
-              <TableContainer>
+              <TableContainer sx={{scrollbarWidth:"none"}}>
                 <Table size="small">
                   <TableHead>
                     <TableRow>
@@ -805,7 +805,7 @@ function Dashboard() {
         </Grid>
         
         {/* Collection Performance Chart */}
-        <Grid item xs={12} md={8}>
+        <Grid size={{ xs: 12, md: 6 ,}} >
           <Card>
             <CardHeader 
               title="Monthly Collection Performance" 
@@ -839,7 +839,7 @@ function Dashboard() {
         </Grid>
         
         {/* Debt Type Distribution */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 6 ,}}>
           <Card sx={{ height: '100%' }}>
             <CardHeader 
               title="Debt Type Distribution" 
@@ -883,8 +883,8 @@ function Dashboard() {
         </Grid>
         
         {/* Recent Documents */}
-        <Grid item xs={12} md={6}>
-          <Card>
+        <Grid size={{ xs: 12, md: 6 ,}}>
+          <Card sx={{maxHeight: 455,}}>
             <CardHeader 
               title="Recent Documents" 
               titleTypographyProps={{ variant: 'h6' }}
@@ -899,10 +899,10 @@ function Dashboard() {
               }
             />
             <Divider />
-            <CardContent sx={{ p: 0 }}>
-              <List sx={{ maxHeight: 350, overflow: 'auto' }}>
+            <CardContent sx={{pb:3}} >
+              <List sx={{ maxHeight: 430, overflow: 'auto',scrollbarWidth:"none" ,}}>
                 {recentDocuments.map((document) => (
-                  <ListItemButton 
+                  <ListItemButton sx={{ mb: 1, mx: 1, borderRadius: 1 }}
                     key={document.id}
                     onClick={() => navigateToDocument(document.id)}
                   >
@@ -937,7 +937,7 @@ function Dashboard() {
         </Grid>
         
         {/* Collection Trends */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 ,}}>
           <Card>
             <CardHeader 
               title="Collection Trends" 
@@ -975,9 +975,9 @@ function Dashboard() {
         </Grid>
         
         {/* Case Status Distribution & Top Performers */}
-        <Grid item xs={12}>
+
           <Grid container spacing={3}>
-            <Grid item xs={12} md={4}>
+            <Grid size={{ xs: 12, md: 6 ,}}>
               <Card>
                 <CardHeader 
                   title="Case Status Distribution" 
@@ -985,7 +985,7 @@ function Dashboard() {
                 />
                 <Divider />
                 <CardContent>
-                  <Box sx={{ height: 300 }}>
+                  <Box sx={{ height: 262 }}>
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
@@ -1010,7 +1010,7 @@ function Dashboard() {
               </Card>
             </Grid>
             
-            <Grid item xs={12} md={8}>
+            <Grid size={{ xs: 12, md: 6 ,}}>
               <Card>
                 <CardHeader 
                   title="Top Case Handlers" 
@@ -1071,7 +1071,7 @@ function Dashboard() {
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+
       
       {/* Task Menu */}
       <Menu

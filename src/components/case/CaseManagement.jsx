@@ -399,7 +399,7 @@ function CaseManagement() {
       {/* Statistics Cards */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
         <Grid item xs={12} sm={6} md={3}>
-          <Card>
+          <Card sx={{ minWidth: '275px' }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                 <Avatar 
@@ -455,7 +455,7 @@ function CaseManagement() {
         </Grid>
         
         <Grid item xs={12} sm={6} md={3}>
-          <Card>
+            <Card sx={{ minWidth: '275px' }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                 <Avatar 
@@ -511,7 +511,7 @@ function CaseManagement() {
         </Grid>
         
         <Grid item xs={12} sm={6} md={3}>
-          <Card>
+          <Card sx={{ minWidth: '275px' }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                 <Avatar 
@@ -559,7 +559,7 @@ function CaseManagement() {
         </Grid>
         
         <Grid item xs={12} sm={6} md={3}>
-          <Card>
+          <Card sx={{ minWidth: '275px' }}>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
                 <Avatar 
@@ -655,7 +655,7 @@ function CaseManagement() {
               Advanced Filters
             </Typography>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={3} minWidth={180}>
                 <TextField
                   select
                   fullWidth
@@ -672,7 +672,7 @@ function CaseManagement() {
                 </TextField>
               </Grid>
               
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={3} minWidth={180}>
                 <TextField
                   select
                   fullWidth
@@ -695,7 +695,7 @@ function CaseManagement() {
                 </TextField>
               </Grid>
               
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={3} minWidth={180}>
                 <TextField
                   select
                   fullWidth
@@ -714,7 +714,7 @@ function CaseManagement() {
                 </TextField>
               </Grid>
               
-              <Grid item xs={12} sm={6} md={3}>
+              <Grid item xs={12} sm={6} md={3} minWidth={180}>
                 <TextField
                   select
                   fullWidth
