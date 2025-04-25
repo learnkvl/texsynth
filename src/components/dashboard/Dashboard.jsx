@@ -748,7 +748,7 @@ function Dashboard() {
                         key={caseItem.id} 
                         hover
                         onClick={() => navigateToCase(caseItem.id)}
-                        sx={{ cursor: 'pointer' }}
+                        sx={{ cursor: 'pointer',height:60 }}
                       >
                         <TableCell>
                           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -985,7 +985,7 @@ function Dashboard() {
                 />
                 <Divider />
                 <CardContent>
-                  <Box sx={{ height: 262 }}>
+                  <Box sx={{ height: 323 }}>
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie

@@ -516,7 +516,7 @@ function DocumentBrowser() {
   
   // Handle upload document
   const handleUploadDocument = () => {
-    navigate('/documents/upload');
+    navigate('/upload');
   };
   
   // Filter and sort documents

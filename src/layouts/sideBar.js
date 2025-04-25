@@ -37,16 +37,17 @@ import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 
 // Import page components
-
+import HomePage from '../components/HomePage';
 import DocumentBrowser from '../components/document/DocumentBrowser';
 import DocumentDetail from '../components/document/DocumentDetail';
 import DocumentUpload from '../components/document/DocumentUpload';
 import CaseManagement from '../components/case/CaseManagement';
 import CaseDetail from '../components/case/CaseDetail';
+import CaseCreateForm from '../components/case/CaseCreateForm';
 import InvoiceList from '../components/invoicing/InvoiceList';
 import EnhancedInvoiceUpload from '../components/invoicing/EnhancedInvoiceUpload';
 import InvoiceCreation from '../components/invoicing/InvoiceCreation';
-import Settings from '../components/settings/Settings';
+import Settings from '../components/Settings';
 import Dashboard from '../components/dashboard/Dashboard';
 import theme from '../theme';
 
@@ -66,12 +67,13 @@ const Logo = () => (
       }}
     >
       <DescriptionIcon sx={{ mr: 1 }} />
-      DebtDoc<span style={{ fontWeight: 400 }}>Discovery</span>
+     TexSynth
     </Typography>
   );
   
   // Navigation items configuration
   const navigationItems = [
+    { text: 'Home', icon: <DescriptionIcon />, path: '/' },
     { text: 'Dashboard', icon: <BarChartIcon />, path: '/dashboard' },
     { text: 'Search & Retrieve', icon: <SearchIcon />, path: '/documents' },
     { text: 'Case Management', icon: <FolderIcon />, path: '/cases' },
@@ -347,6 +349,7 @@ const SideBar = () => {
           <Container maxWidth="xl" sx={{ flex: 1, py: 2 }}>
             {/* Routes */}
             <Routes>
+            <Route path="/" element={<HomePage />} />
               <Route path="/" element={<Dashboard />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/documents" element={<DocumentBrowser />} />
@@ -354,6 +357,7 @@ const SideBar = () => {
               <Route path="/upload" element={<DocumentUpload />} />
               <Route path="/cases" element={<CaseManagement />} />
               <Route path="/cases/:id" element={<CaseDetail />} />
+              <Route path="/cases/create" element={<CaseCreateForm />} />
               <Route path="/invoices" element={<InvoiceList />} />
               {/* <Route path="/invoices/:id" element={<TemplateDetection />} /> */}
               <Route path="/invoices/upload" element={<EnhancedInvoiceUpload />} />
